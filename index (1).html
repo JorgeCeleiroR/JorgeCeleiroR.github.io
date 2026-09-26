@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jorge Celeiro Rodríguez — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+<style>
+  :root{
+    --bg: #0F1B2A;
+    --bg-alt: #16283D;
+    --ink: #ECE7DA;
+    --ink-dim: #9FB0BF;
+    --accent: #C9A15A;
+    --line: rgba(236,231,218,0.14);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--accent); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  a:focus-visible, button:focus-visible, .project-card:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+  code{ font-family: var(--mono); }
+
+  .wrap{ max-width:760px; margin:0 auto; padding:0 24px; }
+
+  nav{ padding:32px 0 0; }
+  nav .wrap{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:12px; }
+  nav .brand{ font-family:var(--serif); font-size:1.05rem; color:var(--ink); }
+  nav ul{ list-style:none; display:flex; gap:28px; margin:0; padding:0; font-size:0.95rem; }
+  nav a{ color:var(--ink-dim); }
+  nav a:hover{ color:var(--accent); text-decoration:none; }
+
+  header.hero{ padding:96px 0 80px; }
+  header.hero p.kicker{ color:var(--ink-dim); font-size:1.05rem; margin:0 0 14px; }
+  header.hero h1{ font-family:var(--serif); font-weight:500; font-size:clamp(2.3rem,5vw,3.4rem); line-height:1.1; margin:0 0 22px; max-width:15ch; }
+  header.hero .lede{ font-size:1.1rem; color:var(--ink-dim); max-width:52ch; margin:0 0 32px; }
+  header.hero .links{ display:flex; gap:24px; flex-wrap:wrap; font-size:0.98rem; }
+
+  section{ padding:64px 0; border-top:1px solid var(--line); }
+  section h2{ font-family:var(--serif); font-weight:500; font-size:1.7rem; margin:0 0 12px; }
+  section > .wrap > p.section-lede{ color:var(--ink-dim); max-width:56ch; margin:0 0 36px; }
+
+  #about p{ max-width:62ch; font-size:1.02rem; }
+  #about p + p{ margin-top:16px; }
+
+  .projects-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:18px; }
+  .project-card{
+    background:var(--bg-alt); border:1px solid var(--line); border-radius:14px; padding:24px;
+    cursor:pointer; text-align:left; color:var(--ink); font-family:var(--sans);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .project-card:hover, .project-card:focus-visible{ border-color: var(--accent); transform: scale(1.03); }
+  .project-card h3{ font-family:var(--serif); font-weight:500; font-size:1.15rem; margin:0 0 8px; }
+  .project-card .tagline{ color:var(--ink-dim); font-size:0.92rem; margin:0 0 16px; }
+  .project-card .tech{ font-family:var(--mono); font-size:0.78rem; color:var(--accent); }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(6,10,16,0.72);
+    display:none; align-items:center; justify-content:center; padding:20px; z-index:50;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background:var(--bg); border:1px solid var(--line); width:100%; max-width:760px;
+    max-height:88vh; display:flex; flex-direction:column; overflow:hidden;
+  }
+  .modal-header{ padding:32px 32px 0; display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+  .modal-header .tech{ font-family:var(--mono); font-size:0.8rem; color:var(--accent); display:block; margin-bottom:14px; }
+  .modal-header h2{ font-family:var(--serif); font-weight:500; font-size:1.9rem; line-height:1.15; margin:0; max-width:20ch; }
+  .modal-close{ background:none; border:none; color:var(--ink-dim); font-size:1.5rem; line-height:1; cursor:pointer; padding:4px; }
+  .modal-close:hover{ color:var(--accent); }
+  .modal-body{ padding:20px 32px 32px; overflow-y:auto; }
+  .modal-tagline{ font-size:1.15rem; color:var(--ink); max-width:52ch; margin:0 0 22px; }
+  .modal-highlight{
+    padding:18px 20px; background:rgba(201,161,90,0.08);
+    border-left:2px solid var(--accent); font-size:1rem; color:var(--ink); max-width:56ch;
+  }
+
+  .code-toggle{
+    display:inline-flex; align-items:center; gap:8px; margin-top:26px;
+    background:none; border:1px solid var(--line); color:var(--ink-dim);
+    font-family:var(--mono); font-size:0.82rem; padding:8px 14px; cursor:pointer;
+  }
+  .code-toggle:hover{ color:var(--accent); border-color:var(--accent); }
+  .code-panel{ display:none; margin-top:16px; }
+  .code-panel.open{ display:block; }
+  .file-pills{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .file-pill{ background:var(--bg-alt); border:1px solid var(--line); color:var(--ink-dim); font-family:var(--mono); font-size:0.78rem; padding:5px 11px; cursor:pointer; }
+  .file-pill.active{ color:var(--accent); border-color:var(--accent); }
+  pre.code-block{ margin:0; background:#0A141F; padding:14px; overflow-x:auto; max-height:280px; font-size:0.8rem; }
+  pre.code-block code{ font-family:var(--mono); }
+
+  .demo-wrap{ border:1px solid var(--line); background:#000; aspect-ratio:16/9; max-height:380px; margin-top:22px; }
+  .demo-wrap iframe{ width:100%; height:100%; border:0; display:block; }
+  .demo-hint{ font-size:0.85rem; color:var(--ink-dim); margin-top:10px; }
+
+  .skills-list{ display:flex; flex-direction:column; }
+  .skill-row{ display:grid; grid-template-columns:1fr 2fr; gap:24px; padding:20px 0; border-bottom:1px solid var(--line); align-items:baseline; }
+  .skill-row:last-child{ border-bottom:none; }
+  .skill-row h3{ font-family:var(--serif); font-weight:500; font-size:1.05rem; margin:0; color:var(--ink); }
+  .skill-row p{ margin:0; color:var(--ink-dim); font-size:0.96rem; }
+  .skill-row p .from{ color:var(--accent); }
+  @media (max-width:620px){ .skill-row{ grid-template-columns:1fr; gap:4px; } }
+
+  footer{ padding:48px 0 64px; border-top:1px solid var(--line); color:var(--ink-dim); font-size:0.92rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  footer .foot-links{ display:flex; gap:20px; }
+
+  @media (max-width:560px){ header.hero{ padding:64px 0 56px; } section{ padding:48px 0; } }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } .project-card{ transition:none; } .project-card:hover, .project-card:focus-visible{ transform:none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">Jorge Celeiro Rodríguez</span>
+    <ul>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#skills">Habilidades</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Estudiante de Desarrollo de Aplicaciones Web (DAW)</p>
+    <h1>Aprendo construyendo cosas que funcionan de verdad.</h1>
+    <p class="lede">Desde aplicaciones de consola en Java hasta juegos interactivos en el navegador: cada proyecto resuelve un problema concreto.</p>
+    <div class="links">
+      <a href="https://github.com/tuusuario" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/tuusuario" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:tucorreo@ejemplo.com">tucorreo@ejemplo.com</a>
+    </div>
+  </div>
+</header>
+
+
+<section id="projects">
+  <div class="wrap">
+    <h2>Proyectos</h2>
+    <p class="section-lede">Haz clic en cualquier tarjeta para ver el detalle, el código y, en el Pong, jugarlo.</p>
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <h2>Habilidades</h2>
+    <p class="section-lede">No como una lista suelta, sino ligadas a dónde las he aplicado de verdad.</p>
+    <div class="skills-list">
+      <div class="skill-row"><h3>Java &amp; POO</h3><p>Encapsulación y sobreescritura de <code>equals()</code>/<code>hashCode()</code>. <span class="from">— Censo de alumnos</span></p></div>
+      <div class="skill-row"><h3>Colecciones y algoritmos</h3><p><code>HashSet</code>, <code>ArrayList</code> y ordenación con <code>Comparator</code>. <span class="from">— Alquiler de coches</span></p></div>
+      <div class="skill-row"><h3>Interfaces gráficas (Swing)</h3><p><code>JFrame</code>, <code>JPanel</code> y eventos con <code>ActionListener</code>. <span class="from">— Gestor de supermercado</span></p></div>
+      <div class="skill-row"><h3>JavaScript orientado a objetos</h3><p>Clases, herencia, <code>requestAnimationFrame</code> y eventos de teclado. <span class="from">— Pong</span></p></div>
+      <div class="skill-row"><h3>HTML &amp; CSS</h3><p>Posicionamiento absoluto y diseño adaptable a pantalla completa. <span class="from">— Pong</span></p></div>
+      <div class="skill-row"><h3>Control de versiones</h3><p>Git y GitHub para organizar y publicar el código.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>&copy; 2026 Jorge Celeiro Rodríguez</span>
+  <div class="foot-links">
+    <a href="https://github.com/tuusuario" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/tuusuario" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:tucorreo@ejemplo.com">Email</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-header">
+      <div>
+        <span class="tech" id="modal-tech"></span>
+        <h2 id="modal-title"></h2>
+      </div>
+      <button class="modal-close" id="modal-close" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-tagline" id="modal-desc"></p>
+      <div class="modal-highlight" id="modal-highlight"></div>
+
+      <div id="demo-block" style="display:none;">
+        <div class="demo-wrap"><iframe id="pong-frame" title="Juego del Pong"></iframe></div>
+        <p class="demo-hint">Haz clic dentro del juego y pulsa W/S o las flechas para sacar.</p>
+      </div>
+
+      <button class="code-toggle" id="code-toggle">&lt;/&gt; Ver código</button>
+      <div class="code-panel" id="code-panel">
+        <div class="file-pills" id="file-pills"></div>
+        <pre class="code-block"><code id="code-content"></code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PONG_SOURCE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Juego del Pong de JCR</title>
+  <style>
+    * { padding: 0; margin: 0; }
+    html, body { width: 100%; height: 100%; background: black; color: white; overflow: hidden; }
+    .tablero { width: 100vw; height: 100vh; border: 6px solid white; position: relative; overflow: hidden; }
+    .marcador { font-family: monospace; font-size: 150px; text-align: center; width: 200px; position: absolute; top: 40px; }
+    .player1 { left: 100px; }
+    .player2 { right: 100px; }
+    .bloque { width: 14px; height: 100px; background: white; position: absolute; bottom: 250px; }
+    .pala1 { left: 40px; }
+    .pala2 { right: 40px; }
+    .red { position: absolute; top: 0; bottom: 0; left: 50%; margin-left: -3px; border-left: 6px solid whitesmoke; }
+    .pelota { background: white; width: 24px; height: 24px; position: absolute; bottom: 300px; left: 400px; border-radius: 50%; }
+  </style>
+</head>
+<body>
+  <div class="tablero">
+    <div class="marcador player1">0</div>
+    <div class="marcador player2">0</div>
+    <div class="bloque pala1"></div>
+    <div class="bloque pala2"></div>
+    <div class="red"></div>
+    <div class="pelota"></div>
+  </div>
+  <script>
+    class Bordes {
+      constructor(minX, maxX, minY, maxY) {
+        this.minX = minX; this.maxX = maxX; this.minY = minY; this.maxY = maxY;
+      }
+    }
+    class ObjetoMovil {
+      constructor(bordesTablero, elemento) {
+        this.bordesTablero = bordesTablero;
+        this.x = parseInt(getComputedStyle(elemento).left);
+        this.y = parseInt(getComputedStyle(elemento).bottom);
+        this.ancho = parseInt(getComputedStyle(elemento).width);
+        this.largo = parseInt(getComputedStyle(elemento).height);
+        this.elemento = elemento;
+      }
+      GetBordes() {
+        return new Bordes(this.x - this.ancho/2, this.x + this.ancho/2, this.y - this.largo/2, this.y + this.largo/2);
+      }
+    }
+    class Pelota extends ObjetoMovil {
+      constructor(bordesTablero, elemento, velocidad, direccionX, direccionY) {
+        super(bordesTablero, elemento);
+        this.velocidad = velocidad; this.direccionX = direccionX; this.direccionY = direccionY;
+      }
+      Mover() {
+        this.x += this.direccionX * this.velocidad;
+        this.y += this.direccionY * this.velocidad;
+        this.elemento.style.left = this.x + "px";
+        this.elemento.style.bottom = this.y + "px";
+        this.ComprobarRebote();
+      }
+      ComprobarRebote() {
+        if (this.y + this.largo/2 > this.bordesTablero.maxY || this.y - this.largo/2 < this.bordesTablero.minY) {
+          this.RebotarY();
+        }
+      }
+      RebotarX() { this.direccionX *= -1; }
+      RebotarY() { this.direccionY *= -1; }
+      ComprobarGol() {
+        if (this.x - this.ancho/2 < this.bordesTablero.minX) return 2;
+        if (this.x + this.ancho/2 > this.bordesTablero.maxX) return 1;
+        return 0;
+      }
+      Resetear(x, y) {
+        this.x = x; this.y = y;
+        this.elemento.style.left = this.x + "px";
+        this.elemento.style.bottom = this.y + "px";
+      }
+    }
+    class Pala extends ObjetoMovil {
+      constructor(bordesTablero, elemento, velocidad, keyUp, keyDown) {
+        super(bordesTablero, elemento);
+        this.velocidad = velocidad; this.velocidadActual = 0;
+        this.keyUp = keyUp.toLowerCase(); this.keyDown = keyDown.toLowerCase();
+        document.addEventListener("keydown", this.keyDownHandler.bind(this));
+        document.addEventListener("keyup", this.keyUpHandler.bind(this));
+      }
+      keyDownHandler(e) {
+        const m = e.key.toLowerCase();
+        if (m === this.keyUp) this.velocidadActual = this.velocidad;
+        if (m === this.keyDown) this.velocidadActual = -this.velocidad;
+      }
+      keyUpHandler() { this.velocidadActual = 0; }
+      Mover() {
+        this.y += this.velocidadActual;
+        if (this.y + this.largo/2 > this.bordesTablero.maxY) this.y = this.bordesTablero.maxY - this.largo/2;
+        if (this.y - this.largo/2 < this.bordesTablero.minY) this.y = this.bordesTablero.minY + this.largo/2;
+        this.elemento.style.bottom = this.y + "px";
+      }
+      ComprobarColision(b2) {
+        let b1 = this.GetBordes();
+        return !(b1.maxX < b2.minX || b1.minX > b2.maxX || b1.maxY < b2.minY || b1.minY > b2.maxY);
+      }
+    }
+    class Marcador {
+      constructor(elemento) { this.elemento = elemento; this.puntos = 0; }
+      GanarPunto() { this.puntos++; this.elemento.innerHTML = this.puntos; }
+    }
+    const tablero = document.querySelector(".tablero");
+    let bordesTablero = new Bordes(0, tablero.clientWidth, 0, tablero.clientHeight);
+    let pelota = new Pelota(bordesTablero, document.querySelector(".pelota"), 10, 0, 0);
+    pelota.Resetear(tablero.clientWidth/2 - pelota.ancho/2, tablero.clientHeight/2 - pelota.largo/2);
+    let pala1 = new Pala(bordesTablero, document.querySelector(".pala1"), 7, "w", "s");
+    let pala2 = new Pala(bordesTablero, document.querySelector(".pala2"), 7, "ArrowUp", "ArrowDown");
+    let player1 = new Marcador(document.querySelector(".player1"));
+    let player2 = new Marcador(document.querySelector(".player2"));
+    let enMovimiento = false;
+    document.addEventListener("keydown", (e) => {
+      if (enMovimiento) return;
+      const m = e.key.toLowerCase();
+      const angulo = (Math.random() * (Math.PI/2)) - (Math.PI/4);
+      if (m === "w" || m === "s") { pelota.direccionX = -Math.cos(angulo); pelota.direccionY = Math.sin(angulo); enMovimiento = true; }
+      if (m === "arrowup" || m === "arrowdown") { pelota.direccionX = Math.cos(angulo); pelota.direccionY = Math.sin(angulo); enMovimiento = true; }
+    });
+    function Update() {
+      if (enMovimiento) pelota.Mover();
+      pala1.Mover(); pala2.Mover();
+      if (pala1.ComprobarColision(pelota.GetBordes()) && pelota.direccionX < 0) pelota.RebotarX();
+      if (pala2.ComprobarColision(pelota.GetBordes()) && pelota.direccionX > 0) pelota.RebotarX();
+      let gol = pelota.ComprobarGol();
+      if (gol !== 0) {
+        if (gol === 1) player1.GanarPunto();
+        if (gol === 2) player2.GanarPunto();
+        pelota.Resetear(tablero.clientWidth/2 - pelota.ancho/2, tablero.clientHeight/2 - pelota.largo/2);
+        pelota.direccionX = 0; pelota.direccionY = 0; enMovimiento = false;
+      }
+    }
+    function loop() { Update(); requestAnimationFrame(loop); }
+    window.addEventListener("resize", () => {
+      bordesTablero.maxX = tablero.clientWidth; bordesTablero.maxY = tablero.clientHeight;
+      if (!enMovimiento) pelota.Resetear(tablero.clientWidth/2 - pelota.ancho/2, tablero.clientHeight/2 - pelota.largo/2);
+    });
+    loop();
+  <\/script>
+</body>
+</html>`;
+
+const PONG_DEMO = PONG_SOURCE
+  .replace("font-size: 150px", "font-size: 90px")
+  .replace("width: 200px", "width: 140px")
+  .replace(".player1 { left: 100px; }", ".player1 { left: 40px; }")
+  .replace(".player2 { right: 100px; }", ".player2 { right: 40px; }")
+  .replace("height: 100px; background: white; position: absolute; bottom: 250px;", "height: 90px; background: white; position: absolute; bottom: 200px;")
+  .replace(".pala1 { left: 40px; }", ".pala1 { left: 30px; }")
+  .replace(".pala2 { right: 40px; }", ".pala2 { right: 30px; }")
+  .replace("width: 24px; height: 24px; position: absolute; bottom: 300px;", "width: 20px; height: 20px; position: absolute; bottom: 250px;");
+
+const PROJECTS = [
+  {
+    id: "censo",
+    name: "Censo y partes de alumnos",
+    tagline: "Gestión del censo de una clase y su historial de partes, por consola.",
+    tech: "Java · Collections",
+    description: "Aplicación de consola en Java que gestiona el censo de una clase y un registro histórico de partes disciplinarios, con un menú de 14 opciones: alta y baja de alumnos, búsquedas por ID o por nombre parcial, y estadísticas como quién no tiene partes o quién supera un mínimo.",
+    highlight: "El censo usa un HashSet&lt;Alumno&gt; para evitar duplicados, apoyado en equals()/hashCode() sobreescritos por ID. El histórico de partes usa un ArrayList, porque ahí sí interesan las repeticiones.",
+    files: [
+      { name: "Alumno.java", lang: "java", code: `package tareaCensoAlumnos;
+
+import java.util.Objects;
+
+public class Alumno {
+
+	private int id;
+	private String nombre;
+	private String curso;
+
+	public Alumno(int id, String nombre, String curso) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.curso = curso;
+	}
+
+	public Alumno() {
+		super();
+	}
+
+	public int getId() { return id; }
+	public void setId(int id) { this.id = id; }
+	public String getNombre() { return nombre; }
+	public void setNombre(String nombre) { this.nombre = nombre; }
+	public String getCurso() { return curso; }
+	public void setCurso(String curso) { this.curso = curso; }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		Alumno other = (Alumno) obj;
+		return id == other.id;
+	}
+
+	@Override
+	public String toString() {
+		return "Alumno [id=" + id + ", nombre=" + nombre + ", curso=" + curso + "]";
+	}
+}` },
+      { name: "Main.java", lang: "java", code: `package tareaCensoAlumnos;
+
+import java.util.*;
+import tareaCensoAlumnos.Alumno;
+
+public class Main {
+
+	static Set<Alumno> censo = new HashSet();
+	static List<Alumno> partes = new ArrayList();
+	static Scanner scLine = new Scanner(System.in);
+	static Scanner scInt = new Scanner(System.in);
+	static boolean salir = true;
+
+	public static void main(String[] args) {
+
+		Alumno a1 = new Alumno(1, "Ana Pérez", "1º DAM");
+		Alumno a2 = new Alumno(2, "Luis Solís", "1º DAM");
+		Alumno a3 = new Alumno(3, "Marta Ruiz", "1º DAM");
+		Alumno a4 = new Alumno(4, "Javier Ortega", "1º DAW");
+		Alumno a5 = new Alumno(5, "Lucía Sánchez", "1º DAW");
+		Alumno a6 = new Alumno(6, "Carlos Martín", "1º DAW");
+
+		censo.add(a1); censo.add(a2); censo.add(a3);
+		censo.add(a4); censo.add(a5); censo.add(a6);
+
+		partes.add(a1); partes.add(a2); partes.add(a3); partes.add(a4);
+		partes.add(a1); partes.add(a5); partes.add(a2); partes.add(a4);
+
+		do {
+			System.out.println("\\n=========== MENU ===========");
+			System.out.println("1.- Mostrar censo de alumnos");
+			System.out.println("2.- Mostrar registro de partes");
+			System.out.println("3.- Añadir alumno al censo");
+			System.out.println("4.- Eliminar alumno del censo por ID.");
+			System.out.println("5.- Poner parte a un alumno buscándolo por ID");
+			System.out.println("6.- Mostrar número de alumnos en el censo");
+			System.out.println("7.- Mostrar número total de partes registrados");
+			System.out.println("8.- Buscar datos alumno por ID y mostrar cuántos partes tiene");
+			System.out.println("9.- Eliminar un parte del registro");
+			System.out.println("10.- Mostrar alumnos del censo sin partes registrados");
+			System.out.println("11.- Mostrar alumnos con al menos un parte");
+			System.out.println("12.- Mostrar alumnos con al menos N partes");
+			System.out.println("13.- Buscar alumnos por nombre (coincidencia parcial)");
+			System.out.println("14.- Salir");
+
+			int opcion = scInt.nextInt();
+			switch (opcion) {
+				case 1: mostrarCenso(); break;
+				case 2: mostrarRegistroDePartes(); break;
+				case 3: anyadirAlumno(); break;
+				case 4: eliminarAlumnoPorId(); break;
+				case 5: ponerPartePorId(); break;
+				case 6: mostrarNumeroAlumnosEnElCenso(); break;
+				case 7: mostrarTotalDePartesRegistrados(); break;
+				case 8: buscarDatosAlumnoYPartesPorId(); break;
+				case 9: eliminarUnParteDelRegistro(); break;
+				case 10: mostrarAlumnosSinPartes(); break;
+				case 11: mostrarAlumnosConUnoOMasPartes(); break;
+				case 12: mostrarAlumnosConPartesAPArtirDeN(); break;
+				case 13: buscarAlumnosPorNombre(); break;
+				case 14: salir(); break;
+			}
+		} while (salir);
+
+		System.out.println("\\nAdeu...");
+	}
+
+	private static void mostrarCenso() {
+		System.out.println("---- CENSO DE ALUMNOS ----");
+		for (Alumno a : censo) System.out.println(a.toString());
+	}
+
+	private static void mostrarRegistroDePartes() {
+		System.out.println("---- REGISTRO DE PARTES (histórico) ----");
+		for (int i = 0; i < partes.size(); i++) System.out.println((i+1) + ".- " + partes.get(i));
+	}
+
+	private static void anyadirAlumno() {
+		System.out.println("\\nIntroduce el id del alumno");
+		int id = scLine.nextInt(); scLine.nextLine();
+		System.out.println("Introduce el nombre del alumno");
+		String nombre = scLine.nextLine();
+		System.out.println("Introduce el curso del alumno");
+		String curso = scLine.nextLine();
+		censo.add(new Alumno(id, nombre, curso));
+	}
+
+	private static void eliminarAlumnoPorId() {
+		System.out.println("Dime el ID del alumno que quieres quitar");
+		int busqueda = scInt.nextInt();
+		Alumno ax = new Alumno(busqueda, "", "");
+		if (censo.contains(ax)) {
+			for (Alumno a : censo) {
+				if (a.getId() == busqueda) {
+					censo.remove(ax);
+					System.out.println("El alumno con id " + a.getId() + " (" + a.getNombre() + ") ha sido quitado del censo");
+					break;
+				}
+			}
+		} else {
+			System.out.println("Eso no es un alumno");
+		}
+	}
+
+	private static void ponerPartePorId() {
+		System.out.println("Dime el ID del alumno quien le quieres poner el parte");
+		int busqueda = scInt.nextInt();
+		Alumno ax = new Alumno(busqueda, "", "");
+		if (censo.contains(ax)) {
+			for (Alumno a : censo) {
+				if (a.getId() == busqueda) {
+					partes.add(a);
+					System.out.println("El alumno con id " + a.getId() + " (" + a.getNombre() + ") se ha llevado un buen partecito");
+					break;
+				}
+			}
+		} else {
+			System.out.println("Eso no es un alumno");
+		}
+	}
+
+	private static void mostrarNumeroAlumnosEnElCenso() {
+		System.out.println("En el censo hay " + censo.size() + " alumnos");
+	}
+
+	private static void mostrarTotalDePartesRegistrados() {
+		System.out.println("Actualmente hay " + partes.size() + " papeles indeseados rulando");
+	}
+
+	private static void buscarDatosAlumnoYPartesPorId() {
+		System.out.println("Dime el ID del alumno que quieres buscar");
+		int busqueda = scInt.nextInt();
+		Alumno ax = new Alumno(busqueda, "", "");
+		if (censo.contains(ax)) {
+			for (Alumno a : censo) if (a.getId() == busqueda) System.out.println(a);
+			int contador = 0;
+			for (Alumno a : partes) if (a.getId() == busqueda) contador++;
+			System.out.println("- Tiene " + contador + " partecito/s");
+		} else {
+			System.out.println("Eso no es un alumno");
+		}
+	}
+
+	private static void eliminarUnParteDelRegistro() {
+		System.out.println("A quien le quitamos un papel indeseado?");
+		int largoParte = scInt.nextInt();
+		Alumno Ax = new Alumno(largoParte, "", "");
+		if (partes.contains(Ax)) {
+			for (Alumno a : censo) {
+				if (a.getId() == largoParte) {
+					partes.remove(a);
+					System.out.println("Parte fuera, " + a.getNombre() + " es tu día de suerte");
+				}
+			}
+		} else {
+			System.out.println("Ese alumno no tiene partes/No es un alumno");
+		}
+	}
+
+	private static void mostrarAlumnosSinPartes() {
+		for (Alumno a : censo) {
+			boolean tieneParte = false;
+			for (Alumno b : partes) if (a.getId() == b.getId()) { tieneParte = true; break; }
+			if (!tieneParte) System.out.println(a);
+		}
+	}
+
+	private static void mostrarAlumnosConUnoOMasPartes() {
+		for (Alumno a : censo) {
+			boolean tieneParte = false;
+			for (Alumno b : partes) if (a.getId() == b.getId()) { tieneParte = true; break; }
+			if (tieneParte) System.out.println(a + " tiene parte/s");
+		}
+	}
+
+	private static void mostrarAlumnosConPartesAPArtirDeN() {
+		System.out.println("Dime el nº de partes");
+		int numPartes = scInt.nextInt();
+		for (Alumno a : censo) {
+			int contador = 0;
+			for (Alumno b : partes) if (a.getId() == b.getId()) contador++;
+			if (contador == numPartes) System.out.println(a + " tiene " + contador + " parte/s");
+		}
+	}
+
+	private static void buscarAlumnosPorNombre() {
+		System.out.println("Dime el nombre del alumno");
+		String busqueda = scLine.nextLine();
+		for (Alumno a : censo) if (a.getNombre().equalsIgnoreCase(busqueda)) System.out.println(a);
+	}
+
+	private static void salir() { salir = false; }
+}` }
+    ]
+  },
+  {
+    id: "coches",
+    name: "Alquiler de coches",
+    tagline: "Simulador de una empresa de alquiler de coches, día a día.",
+    tech: "Java · Comparator",
+    description: "Gestiona qué coches están disponibles y cuáles alquilados, cobra por los días de alquiler al devolver el vehículo y permite dar de alta coches nuevos sobre la marcha.",
+    highlight: "El listado se puede reordenar por matrícula, marca, potencia o días alquilados: cuatro clases que implementan Comparator&lt;Coche&gt;, aplicadas con Collections.sort() sobre la misma lista.",
+    files: [
+      { name: "Coche.java", lang: "java", code: `package Coches;
+
+public class Coche {
+
+	private String matricula;
+	private String marca;
+	private String modelo;
+	private int potencia;
+	private int diasAlquilados;
+
+	public Coche(String matricula, String marca, String modelo, int potencia, int diasAlquilados) {
+		super();
+		this.matricula = matricula;
+		this.marca = marca;
+		this.modelo = modelo;
+		this.potencia = potencia;
+		this.diasAlquilados = diasAlquilados;
+	}
+
+	public String getMatricula() { return matricula; }
+	public void setMatricula(String matricula) { this.matricula = matricula; }
+	public String getMarca() { return marca; }
+	public void setMarca(String marca) { this.marca = marca; }
+	public String getModelo() { return modelo; }
+	public void setModelo(String modelo) { this.modelo = modelo; }
+	public int getPotencia() { return potencia; }
+	public void setPotencia(int potencia) { this.potencia = potencia; }
+	public int getDiasAlquilados() { return diasAlquilados; }
+	public void setDiasAlquilados(int diasAlquilados) { this.diasAlquilados = diasAlquilados; }
+
+	public void pasarDia() { this.diasAlquilados++; }
+
+	public int devolver() {
+		int precio = this.diasAlquilados * 40;
+		this.diasAlquilados = 0;
+		return precio;
+	}
+
+	@Override
+	public String toString() {
+		if (diasAlquilados > 0) {
+			return "Matricula = " + matricula + ", Marca = " + marca + ", Modelo = " + modelo + ", Potencia = " + potencia + ", dias alquilado = " + diasAlquilados;
+		}
+		return "Matricula = " + matricula + ", Marca = " + marca + ", Modelo = " + modelo + ", Potencia = " + potencia;
+	}
+}` },
+      { name: "MainCoches.java", lang: "java", code: `package Coches;
+import java.util.*;
+
+public class MainCoches {
+
+    static Scanner scInt = new Scanner(System.in);
+    static Scanner scLine = new Scanner(System.in);
+    static ArrayList<Coche> todos = new ArrayList<>();
+    static ArrayList<Coche> disponibles = new ArrayList<>();
+    static ArrayList<Coche> alquilados = new ArrayList<>();
+    static int dia = 1;
+
+    public static void main(String[] args) {
+        inicializarCoches();
+        do {
+            System.out.println("\\n=========== MENU DIA " + dia + " ===========");
+            System.out.println("1.- Listado de coches disponibles y alquilados");
+            System.out.println("2.- Introducir nuevo coche");
+            System.out.println("3.- Alquilar");
+            System.out.println("4.- Devolver");
+            System.out.println("5.- Pasar día");
+            System.out.println("6.- Ver listados ordenados");
+            int opcion = scInt.nextInt();
+            switch (opcion) {
+                case 1: ListadoDisponiblesYAlquilados(); break;
+                case 2: IntroducirCoche(); break;
+                case 3: Alquilar(); break;
+                case 4: Devolver(); break;
+                case 5: PasarDia(); break;
+                case 6: ListadosOrdenados(); break;
+                default: System.out.println("No"); break;
+            }
+        } while (true);
+    }
+
+    private static void inicializarCoches() {
+        disponibles.add(new Coche("1111BBB", "seat", "ibiza", 110, 0));
+        disponibles.add(new Coche("2222CCC", "peugeot", "307", 100, 0));
+        disponibles.add(new Coche("3333DDD", "seat", "leon", 120, 0));
+        disponibles.add(new Coche("4444FFF", "ford", "focus", 90, 0));
+        disponibles.add(new Coche("5555GGG", "opel", "corsa", 100, 0));
+        todos.addAll(disponibles);
+    }
+
+    private static void ListadoDisponiblesYAlquilados() {
+        System.out.println("\\nListado de coches disponibles:");
+        for (int i = 0; i < disponibles.size(); i++) System.out.println((i+1) + ".- " + disponibles.get(i));
+        System.out.println("\\nListado de coches alquilados:");
+        for (int i = 0; i < alquilados.size(); i++) System.out.println((i+1) + ".- " + alquilados.get(i));
+    }
+
+    private static void IntroducirCoche() {
+        System.out.print("Matricula: "); String mat = scLine.nextLine();
+        System.out.print("Marca: "); String marca = scLine.nextLine();
+        System.out.print("Modelo: "); String modelo = scLine.nextLine();
+        System.out.print("Potencia: "); int pot = scInt.nextInt();
+        Coche nuevo = new Coche(mat, marca, modelo, pot, 0);
+        disponibles.add(nuevo); todos.add(nuevo);
+        System.out.println("\\nCoche añadido.");
+    }
+
+    private static void Alquilar() {
+        if (disponibles.isEmpty()) { System.out.println("No hay coches disponibles para alquilar."); return; }
+        for (int i = 0; i < disponibles.size(); i++) System.out.println((i+1) + ".- " + disponibles.get(i));
+        System.out.print("\\n¿Qué coche quiere alquilar?: ");
+        int pos = scInt.nextInt() - 1;
+        if (pos < 0 || pos >= disponibles.size()) { System.out.println("No"); return; }
+        Coche c = disponibles.remove(pos);
+        alquilados.add(c);
+        c.pasarDia();
+        System.out.println("El coche con matrícula " + c.getMatricula() + " fue alquilado.");
+    }
+
+    private static void Devolver() {
+        if (alquilados.isEmpty()) { System.out.println("No hay coches alquilados."); return; }
+        for (int i = 0; i < alquilados.size(); i++) System.out.println((i+1) + ".- " + alquilados.get(i));
+        System.out.print("¿Qué coche quiere devolver?: ");
+        int pos = scInt.nextInt() - 1;
+        if (pos < 0 || pos >= alquilados.size()) { System.out.println("No"); return; }
+        Coche c = alquilados.remove(pos);
+        int precio = c.devolver();
+        disponibles.add(c);
+        System.out.println("El coche con matrícula " + c.getMatricula() + " ha sido devuelto y el precio ha sido de " + precio + " €");
+    }
+
+    private static void PasarDia() {
+        for (Coche c : alquilados) c.pasarDia();
+        dia++;
+        System.out.println("Día terminado.");
+    }
+
+    private static void ListadosOrdenados() {
+        System.out.println("\\n1.- Todos ordenados por matrículas");
+        System.out.println("2.- Todos ordenados por marcas");
+        System.out.println("3.- Todos ordenados por potencias");
+        System.out.println("4.- Alquilados ordenados por días alquilados");
+        int opcion2 = scInt.nextInt();
+        switch (opcion2) {
+            case 1: Collections.sort(todos, new OrdenacionPorMatricula()); imprimirLista(todos); break;
+            case 2: Collections.sort(todos, new OrdenacionPorMarca()); imprimirLista(todos); break;
+            case 3: Collections.sort(todos, new OrdenacionPorPotencia()); imprimirLista(todos); break;
+            case 4: Collections.sort(alquilados, new OrdenacionPorDias()); imprimirLista(alquilados); break;
+            default: System.out.println("Opción no válida"); break;
+        }
+    }
+
+    private static void imprimirLista(ArrayList<Coche> lista) {
+        if (lista.isEmpty()) { System.out.println("No hay"); return; }
+        for (Coche c : lista) System.out.println(c);
+    }
+}` },
+      { name: "Comparadores.java", lang: "java", code: `// OrdenacionPorMatricula.java
+package Coches;
+import java.util.Comparator;
+public class OrdenacionPorMatricula implements Comparator<Coche> {
+    public int compare(Coche c1, Coche c2) {
+        return c1.getMatricula().compareTo(c2.getMatricula());
+    }
+}
+
+// OrdenacionPorMarca.java
+package Coches;
+import java.util.Comparator;
+public class OrdenacionPorMarca implements Comparator<Coche> {
+    @Override
+    public int compare(Coche c1, Coche c2) {
+        return c1.getMarca().compareTo(c2.getMarca());
+    }
+}
+
+// OrdenacionPorPotencia.java
+package Coches;
+import java.util.Comparator;
+public class OrdenacionPorPotencia implements Comparator<Coche> {
+    public int compare(Coche c1, Coche c2) {
+        return Integer.compare(c1.getPotencia(), c2.getPotencia());
+    }
+}
+
+// OrdenacionPorDias.java
+package Coches;
+import java.util.Comparator;
+public class OrdenacionPorDias implements Comparator<Coche> {
+    public int compare(Coche c1, Coche c2) {
+        return Integer.compare(c1.getDiasAlquilados(), c2.getDiasAlquilados());
+    }
+}` }
+    ]
+  },
+  {
+    id: "supermercado",
+    name: "Gestor de supermercado",
+    tagline: "Primer proyecto con interfaz gráfica: compra y devolución de productos.",
+    tech: "Java · Swing",
+    description: "Dos ventanas de Swing: una para elegir un producto con radio buttons e indicar cantidad a comprar o devolver, y otra que muestra en tiempo real el stock de cada producto y el precio total acumulado.",
+    highlight: "Las dos ventanas comparten el mismo estado de la aplicación: cada botón actualiza ambas interfaces al instante con ActionListener, con validación vía JOptionPane si se intenta devolver más de lo comprado.",
+    files: [
+      { name: "Producto.java", lang: "java", code: `package SupermercadoCeleiro;
+
+public class Producto {
+    String nombre;
+    double precio;
+    int cantidad;
+
+    public Producto(String nombre, double precio) {
+        super();
+        this.nombre = nombre;
+        this.precio = precio;
+    }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public double getPrecio() { return precio; }
+    public void setPrecio(double precio) { this.precio = precio; }
+    public int getCantidad() { return cantidad; }
+    public void setCantidad(int cantidad) { this.cantidad = cantidad; }
+}` },
+      { name: "Main.java", lang: "java", code: `package SupermercadoCeleiro;
+
+import java.util.*;
+import java.awt.*;
+import javax.swing.*;
+
+public class Main {
+
+	static Producto[] productos = { new Producto("Lejía", 2.5), new Producto("Chocolate", 1.25),
+			new Producto("Brick de leche", 0.9), new Producto("Macarrones", 1.5), new Producto("Jamón", 5.75),
+			new Producto("Pulpo", 10.5), new Producto("Mantequilla", 1.0), new Producto("Lomo", 3.5),
+			new Producto("Natillas", 2.25), new Producto("Caviar", 32.5) };
+
+	static double precioTotal = 0;
+
+	public static void main(String[] args) {
+
+		JFrame frame1 = new JFrame("Supermercado");
+		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame1.setSize(400, 350);
+		frame1.setLocation(200, 150);
+
+		JPanel panel1 = new JPanel(new FlowLayout());
+		JRadioButton[] radios = new JRadioButton[productos.length];
+		ButtonGroup grupo = new ButtonGroup();
+
+		for (int i = 0; i < productos.length; i++) {
+			radios[i] = new JRadioButton(productos[i].getNombre() + " (" + productos[i].getPrecio() + "€)");
+			grupo.add(radios[i]);
+			panel1.add(radios[i]);
+		}
+
+		JLabel lblCantidad = new JLabel("Cantidad:");
+		JTextField txtCantidad = new JTextField(5);
+		JButton btnComprar = new JButton("Comprar");
+		JButton btnDevolver = new JButton("Devolver");
+
+		panel1.add(lblCantidad);
+		panel1.add(txtCantidad);
+		panel1.add(btnComprar);
+		panel1.add(btnDevolver);
+
+		frame1.setContentPane(panel1);
+		frame1.setVisible(true);
+
+		JFrame frame2 = new JFrame("Pedidos Supermercado");
+		frame2.setSize(450, 250);
+		frame2.setLocation(650, 150);
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JPanel panel2 = new JPanel(new FlowLayout());
+		JLabel linea1 = new JLabel();
+		JLabel linea2 = new JLabel();
+		JLabel linea3 = new JLabel();
+		JLabel linea4 = new JLabel();
+
+		panel2.add(linea1); panel2.add(linea2); panel2.add(linea3); panel2.add(linea4);
+		frame2.setContentPane(panel2);
+		frame2.setVisible(true);
+
+		actualizarResumen(linea1, linea2, linea3, linea4);
+
+		btnComprar.addActionListener(e -> {
+			int cantidad = Integer.parseInt(txtCantidad.getText());
+			for (int i = 0; i < radios.length; i++) {
+				if (radios[i].isSelected()) {
+					productos[i].setCantidad(productos[i].getCantidad() + cantidad);
+					precioTotal += cantidad * productos[i].getPrecio();
+				}
+			}
+			actualizarResumen(linea1, linea2, linea3, linea4);
+		});
+
+		btnDevolver.addActionListener(e -> {
+			int cantidad = Integer.parseInt(txtCantidad.getText());
+			for (int i = 0; i < radios.length; i++) {
+				if (radios[i].isSelected()) {
+					if (productos[i].getCantidad() >= cantidad) {
+						productos[i].setCantidad(productos[i].getCantidad() - cantidad);
+						precioTotal -= cantidad * productos[i].getPrecio();
+					} else {
+						JOptionPane.showMessageDialog(frame1,
+								"No tienes suficiente " + productos[i].getNombre() + " para devolver");
+					}
+				}
+			}
+			actualizarResumen(linea1, linea2, linea3, linea4);
+		});
+	}
+
+	public static void actualizarResumen(JLabel l1, JLabel l2, JLabel l3, JLabel l4) {
+		l1.setText(productos[0].getNombre() + ": " + productos[0].getCantidad() + "   " + productos[1].getNombre()
+				+ ": " + productos[1].getCantidad() + "   " + productos[2].getNombre() + ": " + productos[2].getCantidad());
+		l2.setText(productos[3].getNombre() + ": " + productos[3].getCantidad() + "   " + productos[4].getNombre()
+				+ ": " + productos[4].getCantidad() + "   " + productos[5].getNombre() + ": " + productos[5].getCantidad());
+		l3.setText(productos[6].getNombre() + ": " + productos[6].getCantidad() + "   " + productos[7].getNombre()
+				+ ": " + productos[7].getCantidad() + "   " + productos[8].getNombre() + ": " + productos[8].getCantidad()
+				+ "   " + productos[9].getNombre() + ": " + productos[9].getCantidad());
+		l4.setText("Precio total: " + precioTotal);
+	}
+}` }
+    ]
+  },
+  {
+    id: "pong",
+    name: "Pong a dos jugadores",
+    tagline: "Pong a dos jugadores, jugable aquí mismo.",
+    tech: "JavaScript · HTML · CSS",
+    description: "Recreación del clásico Pong en el navegador. Modo local a dos jugadores: W/S mueve la pala izquierda, las flechas ↑/↓ mueven la derecha. Cada jugador saca desde su lado.",
+    highlight: "Programado en JavaScript puro con POO: una clase base ObjetoMovil de la que heredan la pelota y las palas, con colisiones, ángulo de saque aleatorio y rebotes calculados a mano, sin ninguna librería de gráficos.",
+    hasDemo: true,
+    files: [ { name: "index.html", lang: "xml", code: PONG_SOURCE } ]
+  }
+];
+
+const grid = document.getElementById("projects-grid");
+PROJECTS.forEach((p, idx) => {
+  const card = document.createElement("div");
+  card.className = "project-card";
+  card.tabIndex = 0;
+  card.setAttribute("role", "button");
+  card.innerHTML = `<h3>${p.name}</h3><p class="tagline">${p.tagline}</p><span class="tech">${p.tech}</span>`;
+  card.addEventListener("click", () => openModal(idx));
+  card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(idx); } });
+  grid.appendChild(card);
+});
+
+const overlay = document.getElementById("modal-overlay");
+const modalTitle = document.getElementById("modal-title");
+const modalTech = document.getElementById("modal-tech");
+const modalDesc = document.getElementById("modal-desc");
+const modalHighlight = document.getElementById("modal-highlight");
+const demoBlock = document.getElementById("demo-block");
+const codeToggle = document.getElementById("code-toggle");
+const codePanel = document.getElementById("code-panel");
+const filePills = document.getElementById("file-pills");
+const codeContent = document.getElementById("code-content");
+const pongFrame = document.getElementById("pong-frame");
+let lastFocused = null;
+
+function openModal(idx) {
+  const p = PROJECTS[idx];
+  lastFocused = document.activeElement;
+  modalTitle.textContent = p.name;
+  modalTech.textContent = p.tech;
+  modalDesc.textContent = p.tagline;
+  modalHighlight.innerHTML = p.highlight;
+
+  codePanel.classList.remove("open");
+  codeToggle.textContent = "</> Ver código";
+  renderFiles(p.files);
+
+  if (p.hasDemo) {
+    demoBlock.style.display = "block";
+    pongFrame.srcdoc = PONG_DEMO;
+  } else {
+    demoBlock.style.display = "none";
+  }
+
+  overlay.classList.add("open");
+  document.getElementById("modal-close").focus();
+  document.addEventListener("keydown", onKeydown);
+}
+
+codeToggle.addEventListener("click", () => {
+  const open = codePanel.classList.toggle("open");
+  codeToggle.textContent = open ? "</> Ocultar código" : "</> Ver código";
+});
+
+function renderFiles(files) {
+  filePills.innerHTML = "";
+  files.forEach((f, i) => {
+    const pill = document.createElement("button");
+    pill.className = "file-pill" + (i === 0 ? " active" : "");
+    pill.textContent = f.name;
+    pill.addEventListener("click", () => {
+      document.querySelectorAll(".file-pill").forEach(pl => pl.classList.remove("active"));
+      pill.classList.add("active");
+      showFile(f);
+    });
+    filePills.appendChild(pill);
+  });
+  showFile(files[0]);
+}
+
+function showFile(f) {
+  codeContent.className = "language-" + f.lang;
+  codeContent.textContent = f.code;
+  hljs.highlightElement(codeContent);
+}
+
+function closeModal() {
+  overlay.classList.remove("open");
+  pongFrame.srcdoc = "about:blank";
+  document.removeEventListener("keydown", onKeydown);
+  if (lastFocused) lastFocused.focus();
+}
+
+function onKeydown(e) { if (e.key === "Escape") closeModal(); }
+
+document.getElementById("modal-close").addEventListener("click", closeModal);
+overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
+</script>
+
+</body>
+</html>
